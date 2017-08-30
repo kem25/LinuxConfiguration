@@ -234,7 +234,7 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 	</VirtualHost>
 	```
 
-Run `sudo a2ensite nuevoMexico` to enable the virtual host
+Run `sudo a2ensite catalog` to enable the virtual host
 
 	The following prompt will be returned:
 
@@ -262,7 +262,7 @@ Run `sudo a2ensite nuevoMexico` to enable the virtual host
 	logging.basicConfig(stream=sys.stderr)
 	sys.path.insert(0,"/var/www/catalog/")
 
-	from nuevoMexico import app as application
+	from catalog import app as application
 	application.secret_key = '12345'
 	```
 
