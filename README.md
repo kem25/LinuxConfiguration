@@ -13,10 +13,10 @@ You will be prompted to enter a password assosiated with the grader.
 
 ## to give grader sudo access:
 ``sudo visudo``
-inside the file add grader ALL=(ALL:ALL) ALL below the root user 
-save file(nano: ctrl+x, Y, Enter)
-Add grader to /etc/sudoers.d/ and type in grader ALL=(ALL:ALL) ALLby command sudo nano /etc/sudoers.d/grader
-Add root to /etc/sudoers.d/ and type in root ALL=(ALL:ALL) ALLby command sudo nano /etc/sudoers.d/root
+* inside the file add grader ALL=(ALL:ALL) ALL below the root user 
+ save file(nano: ctrl+x, Y, Enter)
+* Add grader to /etc/sudoers.d/ and type in grader ALL=(ALL:ALL) ALLby command sudo nano /etc/sudoers.d/grader
+* Add root to /etc/sudoers.d/ and type in root ALL=(ALL:ALL) ALLby command sudo nano /etc/sudoers.d/root
 
 ## to update current packages:
 Find updates:sudo apt-get update
