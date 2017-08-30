@@ -76,7 +76,7 @@ while logged-in as grader:
 
 
 ### Install mod_wsgi
-1. Install the mod_wsgi package (which is a tool that allows Apache to serve Flask applications) along with python-dev (a package with header files required when building Python extensions); use the following command:
+1. Install the mod_wsgi package along with python-dev use the following command:
 
 	`sudo apt-get install libapache2-mod-wsgi python-dev`
 
@@ -88,8 +88,7 @@ while logged-in as grader:
 
 1. Open the /etc/postgresql/9.5/main/pg_hba.conf file
 
-1. Make sure it looks like this (comments have been removed here for easier reading):
-
+1. Make sure it looks like this:
 	```
 	local   all             postgres                                peer
 	local   all             all                                     peer
@@ -101,9 +100,9 @@ while logged-in as grader:
 Python should already be installed on a machine running Ubuntu 16.04. To verify, simply run `python`. 
 
 ### Create a new PostgreSQL user named `catalog` with limited permissions
-1. PostgreSQL creates a Linux user with the name `postgres` during installation; switch to this user by running `sudo su - postgres` (for security reasons, it is important to only use the `postgres` user for accessing the PostgreSQL software)
+1. PostgreSQL creates a Linux user with the name `postgres` during installation; switch to this user by running `sudo su - postgres` 
 
-1. Connect to psql (the terminal for interacting with PostgreSQL) by running `psql`
+1. Connect to psql  by running `psql`
 
 1. Create the `catalog` user by running `CREATE ROLE catalog WITH LOGIN;`
 
@@ -151,7 +150,7 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 
 1. Run `psql` and then run `\l` to see that the new database has been created
 
-1. Switch back to the `ubuntu` user by running `exit`
+1. Switch back to the `grader` user by running `exit`
 
 
 ### Install git and clone the catalog project
@@ -216,7 +215,7 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 	```
 	<VirtualHost *:80>
 			ServerName XX.XX.XX.XX
-			ServerAdmin ben.in.campbell@gmail.com
+			ServerAdmin --------@gmail.com
 			WSGIScriptAlias / /var/www/catalog/catalog.wsgi
 			<Directory /var/www/catalog/catalog/>
 				Order allow,deny
@@ -249,7 +248,7 @@ Run `sudo a2ensite nuevoMexico` to enable the virtual host
 
 
 ### Write a .wsgi file
-1. Apache serves Flask applications by using a .wsgi file; create a file called catalog.wsgi in /var/www/nuevoMexico
+1. Apache serves Flask applications by using a .wsgi file; create a file called catalog.wsgi in /var/www/catalog
 
 1. Add the following to the file:
 
@@ -301,7 +300,7 @@ Note: if changes need to be made to the project files after the ownership of the
 (Note: vim can be replaced here with nano or another text editor.)
 
 ### Set up the database schema and populate the database
-1. While in the /var/www/nuevoMexico/catalog/ directory, activate the virtualenv by running `. venv/bin/activate`
+1. While in the /var/www/catalog/catalog/ directory, activate the virtualenv by running `. venv/bin/activate`
 
 1. Then run `python populator.py`
 
