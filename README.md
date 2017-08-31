@@ -8,7 +8,7 @@ This project deals with deploying a web-application onto Ubuntu linux server.
 * SSH port: 2200
 * SSH login as grader : ssh grader@34.214.52.161 -p 2200 -i ~/.ssh/catalogapp
 
-## Settion up Account
+## Setting up Account
 * Create a AWS account and create an instance using Lightsail. You will be provided with a public IP and a default private key.
 Connect using SSH through the browser.
 * Download the default key and store in file /c/users/komal/.ssh/key2
@@ -25,8 +25,8 @@ You will be prompted to enter a password assosiated with the grader.
 * Add root to /etc/sudoers.d/ and type in root ALL=(ALL:ALL) ALLby command sudo nano /etc/sudoers.d/root
 
 ## to update current packages:
-Find updates:sudo apt-get update
-Install updates:sudo sudo apt-get upgrade
+* Find updates:`sudo apt-get update`
+* Install updates:`sudo sudo apt-get upgrade`
 
 ## to Change the SSH port from 22 to 2200 and other SSH configuration 
 
@@ -66,19 +66,19 @@ save file(nano: ctrl+x, Y, Enter)
 
 ## Configure the Uncomplicated Firewall (UFW) to only allow  incoming connections for SSH (port 2200), HTTP (port 80),  and NTP (port 123) 
 while logged-in as grader:
-    * Check UFW status to make sure its inactive`sudo ufw status`
-    * Deny all incoming by default`sudo ufw default deny incoming`
-    * Allow outgoing by default`sudo ufw default allow outgoing`
-    * Allow SSH `sudo ufw allow ssh`
-    * Allow SSH on port 2200`sudo ufw allow 2200/tcp`
-    * Allow HTTP on port 80`sudo ufw allow 80/tcp`
-    * Allow NTP on port 123`sudo ufw allow 123/udp`
-    * Turn on firewall`sudo ufw enable`
+* Check UFW status to make sure its inactive`sudo ufw status`
+* Deny all incoming by default`sudo ufw default deny incoming`
+* Allow outgoing by default`sudo ufw default allow outgoing`
+* Allow SSH `sudo ufw allow ssh`
+* Allow SSH on port 2200`sudo ufw allow 2200/tcp`
+* Allow HTTP on port 80`sudo ufw allow 80/tcp`
+* Allow NTP on port 123`sudo ufw allow 123/udp`
+* Turn on firewall`sudo ufw enable`
 
 ### Install and configure Apache
 1. Run `sudo apt-get install apache2` to install Apache
 
-1. Check to make sure it worked by using the public IP of the Amazon Lightsail instance as as a URL in a browser; if Apache is working correctly, a page with the title 'Apache2 Ubuntu Default Page' should load
+2. Check to make sure it worked by using the public IP of the Amazon Lightsail instance as as a URL in a browser; if Apache is working correctly, a page with the title 'Apache2 Ubuntu Default Page' should load
 
 
 ### Install mod_wsgi
@@ -86,15 +86,15 @@ while logged-in as grader:
 
 	`sudo apt-get install libapache2-mod-wsgi python-dev`
 
-1. Make sure mod_wsgi is enabled by running `sudo a2enmod wsgi`
+2. Make sure mod_wsgi is enabled by running `sudo a2enmod wsgi`
 
 
 ### Install PostgreSQL and make sure PostgreSQL is not allowing remote connections
 1. Install PostgreSQL by running `sudo apt-get install postgresql`
 
-1. Open the /etc/postgresql/9.5/main/pg_hba.conf file
+2. Open the /etc/postgresql/9.5/main/pg_hba.conf file
 
-1. Make sure it looks like this:
+3. Make sure it looks like this:
 	```
 	local   all             postgres                                peer
 	local   all             all                                     peer
@@ -108,15 +108,15 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 ### Create a new PostgreSQL user named `catalog` with limited permissions
 1. PostgreSQL creates a Linux user with the name `postgres` during installation; switch to this user by running `sudo su - postgres` 
 
-1. Connect to psql  by running `psql`
+2. Connect to psql  by running `psql`
 
-1. Create the `catalog` user by running `CREATE ROLE catalog WITH LOGIN;`
+3. Create the `catalog` user by running `CREATE ROLE catalog WITH LOGIN;`
 
-1. Next, give the `catalog` user the ability to create databases: `ALTER ROLE catalog CREATEDB;`
+4. Next, give the `catalog` user the ability to create databases: `ALTER ROLE catalog CREATEDB;`
 
-1. Finally, give the `catalog` user a password by running `\password catalog`
+5. Finally, give the `catalog` user a password by running `\password catalog`
 
-1. Check to make sure the `catalog` user was created by running `\du`; a table of sorts will be returned, and it should look like this:
+6. Check to make sure the `catalog` user was created by running `\du`; a table of sorts will be returned, and it should look like this:
 
 	```
 					   List of roles
@@ -126,9 +126,9 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 	 postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
 	```
 
-1. Exit psql by running `\q`
+7. Exit psql by running `\q`
 
-1. Switch back to the `grader` user by running `exit`
+8. Switch back to the `grader` user by running `exit`
 
 ### Create a Linux user called `catalog` and a new PostgreSQL database
 1. Create a new Linux user called `catalog`:
@@ -137,7 +137,7 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 	- enter in a new UNIX password (twice) when prompted
 	- fill out information for `catalog`
 
-1. Give the `catalog` user sudo permissions:
+2. Give the `catalog` user sudo permissions:
     
 	- run `sudo visudo`
 	- search for a line that looks like this: `root    ALL=(ALL:ALL) ALL`
@@ -152,26 +152,26 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 		    (ALL : ALL) ALL
 		```
 
-1. While logged in as `catalog`, create a database called catalog by running `createdb catalog`
+3. While logged in as `catalog`, create a database called catalog by running `createdb catalog`
 
-1. Run `psql` and then run `\l` to see that the new database has been created
+4. Run `psql` and then run `\l` to see that the new database has been created
 
-1. Switch back to the `grader` user by running `exit`
+5. Switch back to the `grader` user by running `exit`
 
 
 ### Install git and clone the catalog project
 1. Run `sudo apt-get install git`
 
-1. Create a directory called 'catalog' in the /var/www/ directory
+2. Create a directory called 'catalog' in the /var/www/ directory
 
-1. Change to the 'catalog' directory, and clone the catalog project:
+3. Change to the 'catalog' directory, and clone the catalog project:
 
 	`sudo git clone https://github.com/kem25/Item-Catalog-project.git catalog`
 	Change to the /var/www/catalog/catalog directory
 
-1. Change the name of the application.py file to \_\_init__.py by running `mv application.py __init__.py`
+4. Change the name of the application.py file to \_\_init__.py by running `mv application.py __init__.py`
 
-1. In \_\_init__.py, find line:
+5. In \_\_init__.py, find line:
 
 	`app.run(host='0.0.0.0', port=5000)`
 
@@ -184,13 +184,13 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 
 	`sudo apt-get install python-pip`
 
-1. Install virtualenv with apt-get by running `sudo apt-get install python-virtualenv`
+2. Install virtualenv with apt-get by running `sudo apt-get install python-virtualenv`
 
-1. Change to the /var/www/catalog/catalog/ directory and create virtual environment by running `sudo virtualenv venv`
+3. Change to the /var/www/catalog/catalog/ directory and create virtual environment by running `sudo virtualenv venv`
 
-. Activate the new environment, `venv`, by running `. venv/bin/activate`
+4. Activate the new environment, `venv`, by running `. venv/bin/activate`
 
-1. With the virtual environment active, install the following dependenies
+5. With the virtual environment active, install the following dependenies
 
 `pip install httplib2`
 
@@ -250,13 +250,13 @@ Run `sudo a2ensite catalog` to enable the virtual host
 	  service apache2 reload
 	```
 
-1. Run `sudo service apache2 reload`
+2. Run `sudo service apache2 reload`
 
 
 ### Write a .wsgi file
 1. Apache serves Flask applications by using a .wsgi file; create a file called catalog.wsgi in /var/www/catalog
 
-1. Add the following to the file:
+2. Add the following to the file:
 
 	```
 	activate_this = '/var/www/catalog/catalog/venv/bin/activate_this.py'
@@ -272,7 +272,7 @@ Run `sudo a2ensite catalog` to enable the virtual host
 	application.secret_key = '12345'
 	```
 
-1. Resart Apache: `sudo service apache2 restart`
+3. Resart Apache: `sudo service apache2 restart`
 
 
 ### Switch the database in the application from SQLite to PostgreSQL
