@@ -2,6 +2,12 @@
 
 This project deals with deploying a web-application onto Ubuntu linux server.
 
+## Access
+IP Address: 34.214.52.161
+URL: http://ec2-34-214-52-161.us-west-2.compute.amazonaws.com/
+SSH port: 2200
+SSH login as grader : ssh grader@34.214.52.161 -p 2200 -i ~/.ssh/catalogapp
+
 ## Settion up Account
 * Create a AWS account and create an instance using Lightsail. You will be provided with a public IP and a default private key.
 Connect using SSH through the browser.
@@ -257,8 +263,8 @@ Run `sudo a2ensite catalog` to enable the virtual host
 	execfile(activate_this, dict(__file__=activate_this))
 
 	#!/usr/bin/python
-	import sys
-	import logging
+	#import sys
+	#import logging
 	logging.basicConfig(stream=sys.stderr)
 	sys.path.insert(0,"/var/www/catalog/")
 
@@ -272,10 +278,10 @@ Run `sudo a2ensite catalog` to enable the virtual host
 ### Switch the database in the application from SQLite to PostgreSQL
 Replace line with create_engine in tdatabase_setup.py, and  populatedb.py as following:
 
-	engine = create_engine('postgresql://catalog:INSERT_PASSWORD_FOR_DATABASE_HERE@localhost/catalog')
+	engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
 
 	### Disable the default Apache site
-1. At some point during the configuration, the default Apache site will likely need to be disabled; to do this, run `sudo a2dissite 000-default.conf`
+ At some point during the configuration, the default Apache site will likely need to be disabled; to do this, run `sudo a2dissite 000-default.conf`
 
 	The following prompt will be returned:
 
@@ -285,7 +291,7 @@ Replace line with create_engine in tdatabase_setup.py, and  populatedb.py as fol
 	  service apache2 reload
 	```
 
-1. Run `sudo service apache2 reload`  
+ Run `sudo service apache2 reload`  
 
 
 ### Change the ownership of the project direcotries
@@ -300,8 +306,11 @@ Note: if changes need to be made to the project files after the ownership of the
 (Note: vim can be replaced here with nano or another text editor.)
 
 ### Set up the database schema and populate the database
-1. While in the /var/www/catalog/catalog/ directory, activate the virtualenv by running `. venv/bin/activate`
+ While in the /var/www/catalog/catalog/ directory, activate the virtualenv by running `. venv/bin/activate`
 
-1. Then run `python populator.py`
+ Then run `python populator.py`
+ Then run `python __init__.py`
+
+You can now access your app at the IP address:34.214.52.161 
 
 
