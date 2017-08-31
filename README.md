@@ -17,7 +17,7 @@ Connect using SSH through the browser.
 ``sudo adduser grader``
 You will be prompted to enter a password assosiated with the grader.
 
-## to give grader sudo access:
+## To give grader sudo access:
 ``sudo visudo``
 * inside the file add grader ALL=(ALL:ALL) ALL below the root user 
  save file(nano: ctrl+x, Y, Enter)
@@ -28,43 +28,40 @@ You will be prompted to enter a password assosiated with the grader.
 * Find updates:`sudo apt-get update`
 * Install updates:`sudo sudo apt-get upgrade`
 
-## to Change the SSH port from 22 to 2200 and other SSH configuration 
+## Change the SSH port from 22 to 2200 and other SSH configuration 
 
-nano /etc/ssh/sshd_config add port 2200 below port 22
-* while in the file also change PermitRootLogin prohibit-password to PermitRootLogin no to disallow root login
-* Change PasswordAuthentication from no to yes. We will change back after finishing SHH login setup
-save file(nano: ctrl+x, Y, Enter)
-* restart ssh servicesudo service ssh reload
+* run sudo `nano /etc/ssh/sshd_config` and add port 2200 below port 22
+* Also change PermitRootLogin prohibit-password to no to disallow root login
+* Change PasswordAuthentication from no to yes. This should be changed back to no after we set our RSA key
+* restart using `sudo service ssh reload`
 
-## Create SSH key pairs:
+## Generate SSH key pairs:
 
 * On your local machine generate SSH key pair with: ssh-keygen
 
-* save your keygen file as ``~/.ssh/catalogapp`` enter login phrase:*******.
+* save your keygen file as ``~/.ssh/catalogapp`` enter login phrase:*****.
 
 * Change the SSH port number configuration in Amazon lightsail in networking tab to 2200.
 
 * login into grader account using password set during user creation ssh -v grader@*Public-IP-Address* -p 2200
 
-* Make .ssh directory ``mkdir .ssh``
+* Create a directory .ssh directory ``mkdir .ssh``
 
-make file to store key ``touch .ssh/authorized_keys``
+* Create file to store key ``touch .ssh/authorized_keys``
 
-* On your local machine read contents of the public key cat .ssh/catalogapp.pub
+* Now, on your local machine read contents of the public key using `cat .ssh/catalogapp.pub`
 
-* Copy the key and paste in the file you just created in grader nano .ssh/authorized_keys paste contents(ctr+v)
+* Save and Exit
 
-save file(nano: ctrl+x, Y, Enter)
+* Then set permissions for files: chmod 700 .ssh chmod 644 .ssh/authorized_keys
 
-* Set permissions for files: chmod 700 .ssh chmod 644 .ssh/authorized_keys
-
-* Change PasswordAuthentication from yes back to no. nano /etc/ssh/sshd_config
+* Change PasswordAuthentication to no. nano /etc/ssh/sshd_config so that users can now login only through the RSA key
 
 save file(nano: ctrl+x, Y, Enter)
 
 * login with key pair: ssh grader@Public-IP-Address* -p 2200 -i ~/.ssh/catalogapp
 
-## Configure the Uncomplicated Firewall (UFW) to only allow  incoming connections for SSH (port 2200), HTTP (port 80),  and NTP (port 123) 
+## Configure UFW 
 while logged-in as grader:
 * Check UFW status to make sure its inactive`sudo ufw status`
 * Deny all incoming by default`sudo ufw default deny incoming`
@@ -78,7 +75,7 @@ while logged-in as grader:
 ### Install and configure Apache
 1. Run `sudo apt-get install apache2` to install Apache
 
-2. Check to make sure it worked by using the public IP of the Amazon Lightsail instance as as a URL in a browser; if Apache is working correctly, a page with the title 'Apache2 Ubuntu Default Page' should load
+2. You can check installation by visiting url..it should show welcome page for Apache.
 
 
 ### Install mod_wsgi
@@ -86,45 +83,28 @@ while logged-in as grader:
 
 	`sudo apt-get install libapache2-mod-wsgi python-dev`
 
-2. Make sure mod_wsgi is enabled by running `sudo a2enmod wsgi`
+2. Run `sudo a2enmod wsgi` to ensure mod_wsgi is enabled.
 
 
-### Install PostgreSQL and make sure PostgreSQL is not allowing remote connections
+### Install PostgreSQL 
 1. Install PostgreSQL by running `sudo apt-get install postgresql`
 
-2. Open the /etc/postgresql/9.5/main/pg_hba.conf file
 
-3. Make sure it looks like this:
-	```
-	local   all             postgres                                peer
-	local   all             all                                     peer
-	host    all             all             127.0.0.1/32            md5
-	host    all             all             ::1/128                 md5
-	```
+### Check for python installation
+Run `python` to check if python is already installed in the machine.
 
-### Make sure Python is installed
-Python should already be installed on a machine running Ubuntu 16.04. To verify, simply run `python`. 
-
-### Create a new PostgreSQL user named `catalog` with limited permissions
-1. PostgreSQL creates a Linux user with the name `postgres` during installation; switch to this user by running `sudo su - postgres` 
+### Create a new PostgreSQL user named `catalog` and limit the permissions
+1. PostgreSQL creates a Linux user with the name `postgres` during installation.To switch to this user run `sudo su - postgres` 
 
 2. Connect to psql  by running `psql`
 
-3. Create the `catalog` user by running `CREATE ROLE catalog WITH LOGIN;`
+3. Create the new `catalog` user by running `CREATE ROLE catalog WITH LOGIN;`
 
-4. Next, give the `catalog` user the ability to create databases: `ALTER ROLE catalog CREATEDB;`
+4. Give the `catalog` user the ability to create databases: `ALTER ROLE catalog CREATEDB;`
 
 5. Finally, give the `catalog` user a password by running `\password catalog`
 
-6. Check to make sure the `catalog` user was created by running `\du`; a table of sorts will be returned, and it should look like this:
-
-	```
-					   List of roles
-	 Role name |                         Attributes                         | Member of 
-	-----------+------------------------------------------------------------+-----------
-	 catalog   | Create DB                                                  | {}
-	 postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
-	```
+6. Run `\du`; a table is returned and it 
 
 7. Exit psql by running `\q`
 
@@ -135,7 +115,6 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 
 	- run `sudo adduser catalog`
 	- enter in a new UNIX password (twice) when prompted
-	- fill out information for `catalog`
 
 2. Give the `catalog` user sudo permissions:
     
@@ -159,7 +138,7 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 5. Switch back to the `grader` user by running `exit`
 
 
-### Install git and clone the catalog project
+### Install git and clone the catalog project from the repo
 1. Run `sudo apt-get install git`
 
 2. Create a directory called 'catalog' in the /var/www/ directory
@@ -169,18 +148,11 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 	`sudo git clone https://github.com/kem25/Item-Catalog-project.git catalog`
 	Change to the /var/www/catalog/catalog directory
 
-4. Change the name of the application.py file to \_\_init__.py by running `mv application.py __init__.py`
+4. Change the name of the application.py file to __init__.py by running `mv application.py __init__.py`
 
-5. In \_\_init__.py, find line:
-
-	`app.run(host='0.0.0.0', port=5000)`
-
-	Change this line to:
-
-	`app.run()`
 
 ### Set up a vitual environment and install dependencies
-1. Start by installing pip (if it isn't installed already) with the following command:
+1. install pip  with the following command:
 
 	`sudo apt-get install python-pip`
 
@@ -188,10 +160,9 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 
 3. Change to the /var/www/catalog/catalog/ directory and create virtual environment by running `sudo virtualenv venv`
 
-4. Activate the new environment, `venv`, by running `. venv/bin/activate`
+4. Activate the new environment, `venv`, by running `. venv/bin/activate` or `source venv/bin/activate`
 
-5. With the virtual environment active, install the following dependenies
-
+5. Then install the following:
 `pip install httplib2`
 
 	`pip install requests`
@@ -206,11 +177,8 @@ Python should already be installed on a machine running Ubuntu 16.04. To verify,
 
 	`pip install psycopg2`
 
-	1. In order to make sure everything was installed correctly, run `python __init__.py`; the following (among other things) should be returned:
-
-	`* Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)`
-
-	1. Deactivate the virtual environment by running `deactivate`
+	
+ Deactivate the virtual environment by running `deactivate`
 
 
 ### Set up and enable a virtual host
@@ -253,7 +221,7 @@ Run `sudo a2ensite catalog` to enable the virtual host
 2. Run `sudo service apache2 reload`
 
 
-### Write a .wsgi file
+### Configuring .wsgi file
 1. Apache serves Flask applications by using a .wsgi file; create a file called catalog.wsgi in /var/www/catalog
 
 2. Add the following to the file:
@@ -269,44 +237,21 @@ Run `sudo a2ensite catalog` to enable the virtual host
 	sys.path.insert(0,"/var/www/catalog/")
 
 	from catalog import app as application
-	application.secret_key = '12345'
+	application.secret_key = 'supersecret'
 	```
 
 3. Resart Apache: `sudo service apache2 restart`
 
 
-### Switch the database in the application from SQLite to PostgreSQL
-Replace line with create_engine in tdatabase_setup.py, and  populatedb.py as following:
-
+### To update the database in the application from SQLite to PostgreSQL
+Replace line with create_engine in tdatabase_setup.py, and  populatedb.py as:
 	engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
-
-	### Disable the default Apache site
- At some point during the configuration, the default Apache site will likely need to be disabled; to do this, run `sudo a2dissite 000-default.conf`
-
-	The following prompt will be returned:
-
-	```
-	Site 000-default disabled.
-	To activate the new configuration, you need to run:
-	  service apache2 reload
-	```
 
  Run `sudo service apache2 reload`  
 
 
-### Change the ownership of the project direcotries
-Change the ownership of the project directories and files to the `www-data` user (this is done because Apache runs as the `www-data` user); while in the /var/www directory, run:
-
-	sudo chown -R www-data:www-data catalog/
-
-Note: if changes need to be made to the project files after the ownership of the directories has been switched to `www-data`, it is best to edit files as the `www-data` user; do this with the following command:
-
-	sudo -u www-data vim INSERT_NAME_OF_FILE
-
-(Note: vim can be replaced here with nano or another text editor.)
-
 ### Set up the database schema and populate the database
- While in the /var/www/catalog/catalog/ directory, activate the virtualenv by running `. venv/bin/activate`
+ While in the /var/www/catalog/catalog/ directory, activate the virtualenv using `. venv/bin/activate`
 
  Then run `python populator.py`
  Then run `python __init__.py`
