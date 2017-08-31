@@ -3,10 +3,10 @@
 This project deals with deploying a web-application onto Ubuntu linux server.
 
 ## Access
-IP Address: 34.214.52.161
-URL: http://ec2-34-214-52-161.us-west-2.compute.amazonaws.com/
-SSH port: 2200
-SSH login as grader : ssh grader@34.214.52.161 -p 2200 -i ~/.ssh/catalogapp
+* IP Address: 34.214.52.161
+* URL: http://ec2-34-214-52-161.us-west-2.compute.amazonaws.com/
+* SSH port: 2200
+* SSH login as grader : ssh grader@34.214.52.161 -p 2200 -i ~/.ssh/catalogapp
 
 ## Settion up Account
 * Create a AWS account and create an instance using Lightsail. You will be provided with a public IP and a default private key.
