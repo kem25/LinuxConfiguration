@@ -258,4 +258,7 @@ Replace line with create_engine in tdatabase_setup.py, and  populatedb.py as:
 
 You can now access your app at the IP address:34.214.52.161 
 
+### Work in progress
+The facebook and google+ API login modules have to be updated in the `venv` to be able to login.
+
 
